@@ -23,7 +23,7 @@ public class Hotel {
     private String place;
     private boolean active;
 
-    @OneToMany
+    @OneToMany(mappedBy = "hotel")
     private List<Room> roomList;
 
 }

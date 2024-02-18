@@ -29,7 +29,7 @@ public class Flight {
     private int numSeats;
     private boolean active;
 
-    @OneToMany()
-    private List<Reservation> reservationList;
+    @OneToMany(mappedBy = "flight")
+    private List<FlightReservation> flightReservationList;
 
 }

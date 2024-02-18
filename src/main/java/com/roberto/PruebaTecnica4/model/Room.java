@@ -23,10 +23,11 @@ public class Room {
     private boolean active;
 
     @ManyToOne
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    @OneToMany
-    private List<RoomReservation> reservationList;
+    @OneToMany(mappedBy = "room")
+    private List<RoomReservation> roomReservationList;
     private boolean isBooked;
 
 

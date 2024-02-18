@@ -1,6 +1,7 @@
 package com.roberto.PruebaTecnica4.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import lombok.*;
 public class FlightReservation extends Reservation {
 
     @ManyToOne()
+    @JoinColumn(name = "flight_id")
     private Flight flight;
     private String origin;
     private String destination;
