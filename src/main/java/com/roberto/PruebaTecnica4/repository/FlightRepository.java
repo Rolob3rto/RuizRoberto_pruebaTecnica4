@@ -11,4 +11,6 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     boolean existsByFlightNumber(String flightNumber);
     Optional<Flight> findByFlightNumber(String flightNumber);
+
+    Flight findFlightPricePersonById(long id);
 }

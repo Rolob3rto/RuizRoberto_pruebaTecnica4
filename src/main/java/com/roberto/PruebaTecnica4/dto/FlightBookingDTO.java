@@ -14,10 +14,12 @@ import java.util.List;
 @ToString
 public class FlightBookingDTO {
 
-    private LocalDate BookingDate;
-    private boolean active;
     private List<Person> personList;
     private Flight flight;
-    private int personQuantity;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
 
+    public int getPersonsQuantity() {
+        return personList != null ? personList.size() : 0;
+    }
 }
