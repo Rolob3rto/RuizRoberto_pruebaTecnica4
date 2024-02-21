@@ -14,12 +14,9 @@ import java.util.List;
 @ToString
 public class RoomBookingDTO {
 
-    private LocalDate BookingDate;
     private List<Person> personList;
     private Room room;
     private LocalDate dateFrom;
     private LocalDate dateTo;
-    private int nights;
-    private int personQuantity;
 
 }
