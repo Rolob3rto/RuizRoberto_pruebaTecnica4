@@ -73,9 +73,6 @@ public class HotelService implements IHotelService{
 
     @Override
     public List<Hotel> getAvailableHotels(LocalDate dateFrom, LocalDate dateTo, String place) {
-        System.out.println("Fecha de inicio recibida en el servicio: " + dateFrom);
-        System.out.println("Fecha de fin recibida en el servicio: " + dateTo);
-        System.out.println("Lugar recibido en el servicio: " + place);
         // Obtener todas las reservas que se solapan con las fechas especificadas
         List<RoomBooking> bookingsInRange = roomBookingService.findRoomBookingsInRange(dateFrom, dateTo);
 

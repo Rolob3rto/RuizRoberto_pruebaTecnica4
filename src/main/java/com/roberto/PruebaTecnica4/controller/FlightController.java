@@ -4,10 +4,12 @@ import com.roberto.PruebaTecnica4.dto.FlightDTO;
 import com.roberto.PruebaTecnica4.model.Flight;
 import com.roberto.PruebaTecnica4.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -113,17 +115,40 @@ public class FlightController {
         }
     }
 
-    @GetMapping()
-    public ResponseEntity<?> findAllFlights (){
-        List<Flight> flights = flightService.getActiveFlights(); // devuelve solo vuelos activos
+    @GetMapping
+    public ResponseEntity<?> getAvailableFlights(
+            @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateFrom,
+            @RequestParam(value = "dateTo", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateTo,
+            @RequestParam(value = "origin", required = false) String origin,
+            @RequestParam(value = "destination", required = false) String destination) {
 
-        if (flights.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se han encontrado vuelos activos");
+        if (dateFrom != null && dateTo != null && origin != null && destination != null) {
+            // Lógica para filtrar vuelos según las fechas, origen y destino
+            if (!isValidDates(dateFrom, dateTo)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Las fechas están mal proporcionadas");
+            }
+            List<Flight> availableFlights = flightService.getAvailableFlights(dateFrom, dateTo, origin, destination);
+
+            if (availableFlights.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron vuelos disponibles para las fechas, origen y destino especificados");
+            } else {
+                return ResponseEntity.ok(availableFlights);
+            }
+
         } else {
-            return ResponseEntity.ok(flights);
+            // Lógica para mostrar todos los vuelos
+            List<Flight> flights = flightService.getActiveFlights();
+
+            if (flights.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se han encontrado vuelos");
+            } else {
+                return ResponseEntity.ok(flights);
+            }
         }
     }
 
-
+    private boolean isValidDates(LocalDate dateFrom, LocalDate dateTo) {
+        return dateFrom != null && dateTo != null && !dateTo.isBefore(dateFrom);
+    }
 
 }

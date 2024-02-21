@@ -6,6 +6,7 @@ import com.roberto.PruebaTecnica4.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,26 @@ public class FlightService implements IFlightService{
         return allFlights.stream()
                 .filter(Flight::isActive) // Filtrar solo vuelos activos
                 .collect(Collectors.toList());
+    }
+
+    public List<Flight> getAvailableFlights(LocalDate dateFrom, LocalDate dateTo, String origin, String destination) {
+        // Primero, verifica si las fechas son válidas
+        if (!isValidDates(dateFrom, dateTo)) {
+            throw new IllegalArgumentException("Las fechas proporcionadas no son válidas");
+        }
+
+        List<Flight> availableFlights = flightRepository.findAvailableFlights(dateFrom, dateTo, origin, destination);
+
+        // Filtra los vuelos por vuelso que tengan asientos
+        availableFlights = availableFlights.stream()
+                .filter(flight -> flight.getNumSeats() > 0)
+                .collect(Collectors.toList());
+
+        return availableFlights;
+    }
+
+    private boolean isValidDates(LocalDate dateFrom, LocalDate dateTo) {
+        return dateFrom != null && dateTo != null && !dateTo.isBefore(dateFrom);
     }
 
 

@@ -110,10 +110,6 @@ public class HotelController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateTo,
             @RequestParam(value = "place", required = false) String place) {
 
-        System.out.println("Fecha de inicio: " + dateFrom);
-        System.out.println("Fecha de fin: " + dateTo);
-        System.out.println("Lugar: " + place);
-
         if (dateFrom != null && dateTo != null && place != null) {
             // Lógica para filtrar hoteles según las fechas y el destino
             if (!isValidDates(dateFrom, dateTo)) {
