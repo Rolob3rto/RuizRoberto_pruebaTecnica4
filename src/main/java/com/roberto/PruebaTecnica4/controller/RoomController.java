@@ -55,7 +55,7 @@ public class RoomController {
     @DeleteMapping("/delete/{roomName}")
     public ResponseEntity<String> deleteRoom(@PathVariable String roomName) {
         if (roomService.existsByName(roomName)) {
-            roomService.deleteRoom(roomName);
+            roomService.logicDeleteRoom(roomName);
             return ResponseEntity.status(HttpStatus.OK).body("La habitación ha sido eliminada exitosamente");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna habitación con el nombre: " + roomName);
@@ -74,7 +74,7 @@ public class RoomController {
 
     @GetMapping()
     public ResponseEntity<?> getAllRooms() {
-        List<Room> rooms = roomService.getAllRooms();
+        List<Room> rooms = roomService.getActiveRooms();
         if (rooms.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se han encontrado habitaciones");
         } else {

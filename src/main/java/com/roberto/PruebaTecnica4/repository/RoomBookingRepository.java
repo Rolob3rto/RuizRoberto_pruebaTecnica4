@@ -14,4 +14,7 @@ public interface RoomBookingRepository extends JpaRepository<RoomBooking, Long> 
     @Query("SELECT rb FROM RoomBooking rb WHERE rb.room.id = :roomId AND rb.dateFrom <= :dateTo AND rb.dateTo >= :dateFrom")
     List<RoomBooking> findOverlappingBookings(long roomId, LocalDate dateFrom, LocalDate dateTo);
 
+    @Query("SELECT rb FROM RoomBooking rb WHERE rb.dateFrom <= :dateTo AND rb.dateTo >= :dateFrom")
+    List<RoomBooking> findRoomBookingsInRange(LocalDate dateFrom, LocalDate dateTo);
+
 }

@@ -1,5 +1,6 @@
 package com.roberto.PruebaTecnica4.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -20,10 +21,10 @@ public class RoomBooking extends Booking {
 
     @ManyToOne()
     @JoinColumn(name = "room_id")
+    @JsonBackReference
     private Room room;
 
     private LocalDate dateFrom;
     private LocalDate dateTo;
-    private int nights;
 
 }

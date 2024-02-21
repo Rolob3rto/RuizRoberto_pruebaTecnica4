@@ -1,6 +1,7 @@
 package com.roberto.PruebaTecnica4.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
@@ -42,6 +43,7 @@ public class Flight {
     private boolean active;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<FlightBooking> flightBookingList;
 
     public Flight(String flightNumber, String origin, String destination, int numSeats, LocalDate flightDate, String typeSeat, double pricePerson, boolean active, List<FlightBooking> flightBookingList) {

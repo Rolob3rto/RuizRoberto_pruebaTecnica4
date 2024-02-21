@@ -2,6 +2,7 @@ package com.roberto.PruebaTecnica4.controller;
 
 import com.roberto.PruebaTecnica4.dto.RoomBookingDTO;
 import com.roberto.PruebaTecnica4.model.RoomBooking;
+import com.roberto.PruebaTecnica4.repository.RoomRepository;
 import com.roberto.PruebaTecnica4.service.RoomBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ public class RoomBookingController {
     @Autowired
     private RoomBookingService roomBookingService;
 
+    @Autowired
+    private RoomRepository roomRepository;
+
     @PostMapping("/new")
     public ResponseEntity<String> createHotelBooking(@RequestBody RoomBookingDTO requestDTO) {
 
@@ -38,6 +42,7 @@ public class RoomBookingController {
         roomBooking.setRoom(requestDTO.getRoom());
         roomBooking.setDateFrom(requestDTO.getDateFrom());
         roomBooking.setDateTo(requestDTO.getDateTo());
+        roomBooking.setTotalAmount(calculateTotalAmount(roomBooking));
         roomBooking.setActive(true);
 
         if (requestDTO.getPersonList().isEmpty()){
@@ -59,13 +64,15 @@ public class RoomBookingController {
     }
 
     private double calculateTotalAmount(RoomBooking roomBooking) {
-        double amount = roomBooking.getRoom().getRoomPrice() * getNights(roomBooking.getDateFrom(), roomBooking.getDateTo());
-        return amount;
+        Double roomPrice = roomRepository.findRoomPriceById(roomBooking.getRoom().getId());
+        Integer nights = getNights(roomBooking.getDateFrom(), roomBooking.getDateTo());
+
+        return roomPrice * nights;
     }
 
     public int getNights(LocalDate dateFrom, LocalDate dateTo) {
         // Calcula el número de noches entre las fechas de entrada y salida
-        return (int) ChronoUnit.DAYS.between(dateFrom, dateTo) - 1;
+        return (int) ChronoUnit.DAYS.between(dateFrom, dateTo);
     }
 }
 

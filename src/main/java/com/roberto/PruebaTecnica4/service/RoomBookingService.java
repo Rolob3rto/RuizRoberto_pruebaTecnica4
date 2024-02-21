@@ -32,6 +32,11 @@ public class RoomBookingService implements IRoomBookingService{
         return true;
     }
 
+    @Override
+    public List<RoomBooking> findRoomBookingsInRange(LocalDate dateFrom, LocalDate dateTo) {
+        return roomBookingRepository.findRoomBookingsInRange(dateFrom, dateTo);
+    }
+
     public void saveRoomBooking(RoomBooking roomBooking) {
 
         if (isRoomAvailable(roomBooking.getRoom(), roomBooking.getDateFrom(), roomBooking.getDateTo())){

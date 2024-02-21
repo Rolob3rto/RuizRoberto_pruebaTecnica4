@@ -29,7 +29,6 @@ public class Booking {
     private boolean active;
 
     @ManyToMany(mappedBy = "bookings")
-    //TODO minimo una persona en cada reserva???
     private List<Person> personList;
 
     @PrePersist

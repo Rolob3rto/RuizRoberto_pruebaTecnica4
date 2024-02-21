@@ -4,10 +4,12 @@ import com.roberto.PruebaTecnica4.dto.HotelDTO;
 import com.roberto.PruebaTecnica4.model.Hotel;
 import com.roberto.PruebaTecnica4.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -89,7 +91,9 @@ public class HotelController {
         }
     }
 
-    @GetMapping()
+    //TODO borrar si va el de abajo
+
+    /*@GetMapping()
     public ResponseEntity<?> findAllHotels() {
         List<Hotel> hotels = hotelService.getActiveHotels();
 
@@ -98,5 +102,43 @@ public class HotelController {
         } else {
             return ResponseEntity.ok(hotels);
         }
+    }*/
+
+    @GetMapping()
+    public ResponseEntity<?> getAvailableHotels(
+            @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateFrom,
+            @RequestParam(value = "dateTo", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateTo,
+            @RequestParam(value = "place", required = false) String place) {
+
+        System.out.println("Fecha de inicio: " + dateFrom);
+        System.out.println("Fecha de fin: " + dateTo);
+        System.out.println("Lugar: " + place);
+
+        if (dateFrom != null && dateTo != null && place != null) {
+            // Lógica para filtrar hoteles según las fechas y el destino
+            if (!isValidDates(dateFrom, dateTo)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Las fechas están mal proporcionadas");
+            }
+            List<Hotel> availableHotels = hotelService.getAvailableHotels(dateFrom, dateTo, place);
+
+            if (availableHotels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron hoteles disponibles para las fechas y destino especificados");
+            } else {
+                return ResponseEntity.ok(availableHotels);
+            }
+
+        } else {
+            // Lógica para mostrar todos los hoteles
+            List<Hotel> hotels = hotelService.getActiveHotels();
+
+            if (hotels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se han encontrado hoteles activos");
+            } else {
+                return ResponseEntity.ok(hotels);
+            }
+        }
+    }
+    private boolean isValidDates(LocalDate dateFrom, LocalDate dateTo) {
+        return dateFrom != null && dateTo != null && !dateTo.isBefore(dateFrom);
     }
 }
