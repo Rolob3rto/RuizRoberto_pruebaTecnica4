@@ -17,18 +17,28 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 
 // Columna discriminadora para identificar el tipo de reserva que es
-@DiscriminatorColumn(name = "reservation_type")
+@DiscriminatorColumn(name = "booking_type")
 
-public class Reservation {
+public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDate ReservationDate;
-    private int peopleQuantity;
+    private LocalDate BookingDate;
+    private double totalAmount;
+    private boolean active;
 
-    @ManyToMany(mappedBy = "reservations")
+    @ManyToMany(mappedBy = "bookings")
+    //TODO minimo una persona en cada reserva???
     private List<Person> personList;
 
-    private boolean active;
+    @PrePersist
+    protected void onCreate() {
+        BookingDate = LocalDate.now();
+    }
+
+    public int getPersonsQuantity() {
+        return personList != null ? personList.size() : 0;
+    }
+
 }

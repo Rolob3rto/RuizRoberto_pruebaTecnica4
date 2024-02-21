@@ -1,6 +1,7 @@
 package com.roberto.PruebaTecnica4.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.List;
@@ -16,17 +17,24 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private String dni;
 
-    private String eMail;
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "El email proporcionado no es válido")
+    @Column(unique = true, nullable = false)
+    private String email;
+    private boolean active;
+
 
     @ManyToMany
-    @JoinTable(name = "person_reservation",
+    @JoinTable(name = "person_booking",
             joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "reservation_id"))
-    private List<Reservation> reservations;
+            inverseJoinColumns = @JoinColumn(name = "booking_id"))
+    private List<Booking> bookings;
 
-    private boolean active;
 }

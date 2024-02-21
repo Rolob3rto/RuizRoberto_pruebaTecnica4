@@ -1,5 +1,6 @@
 package com.roberto.PruebaTecnica4.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,12 +12,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FlightReservation extends Reservation {
+
+@DiscriminatorValue("flightBooking")
+public class FlightBooking extends Booking {
 
     @ManyToOne()
     @JoinColumn(name = "flight_id")
     private Flight flight;
-    private String origin;
-    private String destination;
-    private String seatType;
 }
