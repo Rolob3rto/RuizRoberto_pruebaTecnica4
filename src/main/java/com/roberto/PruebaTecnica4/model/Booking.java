@@ -28,7 +28,10 @@ public class Booking {
     private double totalAmount;
     private boolean active;
 
-    @ManyToMany(mappedBy = "bookings")
+    @ManyToMany//(mappedBy = "bookings")
+    @JoinTable(name = "person_booking",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "booking_id"))
     private List<Person> personList;
 
     @PrePersist

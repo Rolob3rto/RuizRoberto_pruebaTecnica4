@@ -1,5 +1,6 @@
 package com.roberto.PruebaTecnica4.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -31,10 +32,8 @@ public class Person {
     private boolean active;
 
 
-    @ManyToMany
-    @JoinTable(name = "person_booking",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "booking_id"))
+    @ManyToMany(mappedBy = "personList")
+    @JsonIgnore
     private List<Booking> bookings;
 
 }
