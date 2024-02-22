@@ -32,6 +32,7 @@ public class FlightBookingController {
         flightBooking.setBookingDate(LocalDate.now());
         flightBooking.setFlight(requestDTO.getFlight());
         flightBooking.setTotalAmount(calculateTotalAmount(flightBooking));
+        flightBooking.setPersonList(requestDTO.getPersonList());
         flightBooking.setActive(true);
 
         if (requestDTO.getPersonList().isEmpty()) {

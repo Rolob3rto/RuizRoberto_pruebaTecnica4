@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/hotel-booking")
@@ -42,7 +41,8 @@ public class RoomBookingController {
         roomBooking.setRoom(requestDTO.getRoom());
         roomBooking.setDateFrom(requestDTO.getDateFrom());
         roomBooking.setDateTo(requestDTO.getDateTo());
-        roomBooking.setTotalAmount(calculateTotalAmount(roomBooking));
+        roomBooking.setTotalAmount(roomBookingService.calculateTotalAmount(roomBooking));
+        roomBooking.setPersonList(requestDTO.getPersonList());
         roomBooking.setActive(true);
 
         if (requestDTO.getPersonList().isEmpty()){
@@ -50,7 +50,7 @@ public class RoomBookingController {
         }
         roomBooking.setPersonList(requestDTO.getPersonList());
         // Calcular el monto total de la reserva
-        roomBooking.setTotalAmount(calculateTotalAmount(roomBooking));
+        roomBooking.setTotalAmount(roomBookingService.calculateTotalAmount(roomBooking));
 
         // Guardar la reserva en la base de datos
         roomBookingService.saveRoomBooking(roomBooking);
@@ -63,16 +63,5 @@ public class RoomBookingController {
         return dateFrom != null && dateTo != null && !dateTo.isBefore(dateFrom);
     }
 
-    private double calculateTotalAmount(RoomBooking roomBooking) {
-        Double roomPrice = roomRepository.findRoomPriceById(roomBooking.getRoom().getId());
-        Integer nights = getNights(roomBooking.getDateFrom(), roomBooking.getDateTo());
-
-        return roomPrice * nights;
-    }
-
-    public int getNights(LocalDate dateFrom, LocalDate dateTo) {
-        // Calcula el número de noches entre las fechas de entrada y salida
-        return (int) ChronoUnit.DAYS.between(dateFrom, dateTo);
-    }
 }
 

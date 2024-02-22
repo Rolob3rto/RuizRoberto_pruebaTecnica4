@@ -65,7 +65,7 @@ public class FlightService implements IFlightService{
     public List<Flight> getActiveFlights() {
         List<Flight> allFlights = flightRepository.findAll();
         return allFlights.stream()
-                .filter(Flight::isActive) // Filtrar solo vuelos activos
+                .filter(Flight::isActive)
                 .collect(Collectors.toList());
     }
 

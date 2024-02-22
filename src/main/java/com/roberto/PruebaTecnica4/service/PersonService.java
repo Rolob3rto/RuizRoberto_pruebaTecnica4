@@ -55,4 +55,7 @@ public class PersonService implements IPersonService{
                 .collect(Collectors.toList());
     }
 
+    public Person findPersonById(long id) {
+        return personRepository.findById(id).orElseThrow(null);
+    }
 }
