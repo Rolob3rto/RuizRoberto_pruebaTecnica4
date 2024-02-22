@@ -89,8 +89,6 @@ public class FlightController {
         }
     }
 
-    //TODO AÑADIR QUE SI TIENE RESERVAS EL VUELO NO SE PUEDA BORRAR
-
     @DeleteMapping("/delete/{flightNumber}")
     public ResponseEntity<String> deleteFlight (@PathVariable String flightNumber){
 
