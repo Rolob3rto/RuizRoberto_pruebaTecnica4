@@ -1,5 +1,6 @@
 package com.roberto.PruebaTecnica4.service;
 
+import com.roberto.PruebaTecnica4.exceptions.FlightHasReservationsException;
 import com.roberto.PruebaTecnica4.exceptions.FlightNotFoundException;
 import com.roberto.PruebaTecnica4.model.Flight;
 import com.roberto.PruebaTecnica4.repository.FlightRepository;
@@ -39,7 +40,13 @@ public class FlightService implements IFlightService{
         Flight flight = flightRepository.findByFlightNumber(flightNumber)
                 .orElseThrow(() -> new FlightNotFoundException("No se encontró ningún vuelo con el numero: " + flightNumber));
 
-        flight.setActive(false);
+        if (flight.getFlightBookingList().isEmpty()){
+
+            flight.setActive(false);
+        } else {
+            throw new FlightHasReservationsException("No se puede borrar el vuelo porque tiene reservas");
+        }
+
 
         flightRepository.save(flight);
 

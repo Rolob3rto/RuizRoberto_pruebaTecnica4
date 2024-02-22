@@ -91,19 +91,6 @@ public class HotelController {
         }
     }
 
-    //TODO borrar si va el de abajo
-
-    /*@GetMapping()
-    public ResponseEntity<?> findAllHotels() {
-        List<Hotel> hotels = hotelService.getActiveHotels();
-
-        if (hotels.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se han encontrado hoteles activos");
-        } else {
-            return ResponseEntity.ok(hotels);
-        }
-    }*/
-
     @GetMapping()
     public ResponseEntity<?> getAvailableHotels(
             @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateFrom,

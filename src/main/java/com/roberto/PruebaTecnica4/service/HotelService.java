@@ -1,5 +1,6 @@
 package com.roberto.PruebaTecnica4.service;
 
+import com.roberto.PruebaTecnica4.exceptions.HotelHasReservationsException;
 import com.roberto.PruebaTecnica4.exceptions.HotelNotFoundException;
 import com.roberto.PruebaTecnica4.model.Hotel;
 import com.roberto.PruebaTecnica4.model.Room;
@@ -41,7 +42,12 @@ public class HotelService implements IHotelService{
         Hotel hotel = hotelRepository.findByHotelCode(hotelCode)
                 .orElseThrow(() -> new HotelNotFoundException("No se encontró ningún hotel con el código: " + hotelCode));
 
-        hotel.setActive(false);
+        if (hotel.getRoomList().stream().allMatch(room -> room.getRoomBookingList().isEmpty())){
+
+            hotel.setActive(false);
+        } else {
+            throw new HotelHasReservationsException("No se puede borrar el hotel porque tiene habitaciones reservadas");
+        }
 
         hotelRepository.save(hotel);
     }
